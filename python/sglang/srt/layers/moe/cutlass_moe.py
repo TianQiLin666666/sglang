@@ -217,7 +217,8 @@ def cutlass_fused_experts_fp8(
     )
     print("topk_weights: ", topk_weights.dtype)
     result = torch.empty((m, k), device=device, dtype=out_dtype)
-    return apply_shuffle_mul_sum(c2, result, c_map, topk_weights)
+    apply_shuffle_mul_sum(c2, result, c_map, topk_weights)
+    return result
 
 
 FLOAT4_E2M1_MAX = 6.0
