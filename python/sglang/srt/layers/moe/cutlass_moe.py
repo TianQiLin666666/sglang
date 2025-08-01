@@ -159,7 +159,7 @@ def cutlass_fused_experts_fp8(
     else:
         rep_a = shuffle_rows(a, a_map, (m * topk, k))
         rep_a_q, rep_a1_scales = per_token_group_quant_fp8_hopper_moe_mn_major(rep_a, expert_offsets, problem_sizes1, 128)
-        w1_scale.transpose(1, 2).contiguous()
+        w1_scale = w1_scale.contiguous()
         print("rep_a: ", rep_a.shape, rep_a.stride())
         print("rep_a1_scales: ", rep_a1_scales.shape, rep_a1_scales.stride())
         print("w1_q: ", w1_q.shape, w1_q.stride())
@@ -199,7 +199,7 @@ def cutlass_fused_experts_fp8(
         intemediate_q, a2_scale = sglang_per_token_group_quant_fp8(intermediate, 128)
     else:
         intemediate_q, a2_scale = per_token_group_quant_fp8_hopper_moe_mn_major(intermediate, expert_offsets, problem_sizes2, 128)
-        w2_scale = w2_scale.transpose(1, 2).contiguous()
+        w2_scale = w2_scale.contiguous()
 
     fp8_blockwise_scaled_grouped_mm(
         c2,
