@@ -215,7 +215,7 @@ def cutlass_fused_experts_fp8(
         expert_offsets[:-1],
         workspace,
     )
-    print("topk_weights: ", topk_weights.dtype)
+
     result = torch.empty((m, k), device=device, dtype=out_dtype)
     apply_shuffle_mul_sum(c2, result, c_map, topk_weights.to(out_dtype))
     return result
